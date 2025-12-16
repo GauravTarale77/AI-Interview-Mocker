@@ -24,7 +24,7 @@ export async function POST(req) {
         jobDesc,
         jobExperience,
         createdBy,
-        createdAt,
+        createdAt: new Date(),
       })
       .returning({ mockId: MockInterview.mockId });
 
