@@ -5,10 +5,6 @@ export async function POST(req) {
   try {
     const { jobPosition, jobDesc, years, count = 5 } = await req.json();
 
-    const ai = new GoogleGenAI({
-      apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
-    });
-
     const prompt = `
 Return exactly ${count} interview Q&A as a JSON array.
 Each item: { "question": string, "answer": string }.
@@ -19,7 +15,7 @@ Base on:
 Output ONLY the JSON array.
 `.trim();
 
-    const resp = await ai.models.generateContent({
+    const resp = await generateWithRetry({
       model: "gemini-2.5-flash",
       contents: prompt,
       config: {
@@ -47,3 +43,4 @@ Output ONLY the JSON array.
     return NextResponse.json({ error: "Generation failed" }, { status: 500 });
   }
 }
+
